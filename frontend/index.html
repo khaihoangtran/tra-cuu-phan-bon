@@ -267,26 +267,6 @@ header{
   font-size:.87rem;cursor:pointer;
 }
 
-/* ── CONFIG TOGGLE ───────────────────────────────── */
-#configToggle{
-  position:fixed;bottom:20px;right:20px;display:none;
-  padding:9px 16px;background:var(--green);color:#fff;border:none;
-  border-radius:8px;font-family:'Be Vietnam Pro',sans-serif;font-weight:700;
-  font-size:.78rem;cursor:pointer;box-shadow:0 4px 14px rgba(45,122,58,.35);
-  z-index:200;
-}
-#configPanel{
-  position:fixed;bottom:56px;right:20px;background:#fff;
-  border:1px solid var(--border);border-radius:var(--r);
-  padding:16px 20px;width:300px;display:none;
-  box-shadow:var(--shadow-lg);z-index:200;
-}
-#configPanel label{font-size:.76rem;color:var(--muted);display:block;margin-bottom:6px}
-#configPanel input{
-  width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;
-  font-size:.8rem;outline:none;margin-bottom:10px;font-family:'Be Vietnam Pro',sans-serif;
-}
-#configPanel input:focus{border-color:var(--green)}
 
 mark{background:rgba(45,122,58,.15);color:var(--green);border-radius:3px;padding:0 2px}
 </style>
@@ -383,17 +363,13 @@ mark{background:rgba(45,122,58,.15);color:var(--green);border-radius:3px;padding
   <div class="pagination" id="pagination"></div>
 </div>
 
-<!-- CONFIG TOGGLE -->
-<button id="configToggle" onclick="toggleConfig()">⚙ API</button>
-<div id="configPanel">
-  <label>Backend URL</label>
-  <input type="text" id="apiUrlInput" placeholder="https://..."/>
-  <button class="api-save-btn" onclick="saveApiUrl()" style="width:100%;padding:8px">Lưu & Kết nối lại</button>
-</div>
 
 <script>
 // ── STATE ──────────────────────────────────────────
-let API_BASE     = localStorage.getItem('api_base') || '';
+const DEFAULT_API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:8000'
+  : '';
+let API_BASE     = localStorage.getItem('api_base') || DEFAULT_API;
 let currentPage  = 1;
 let currentQuery = '';
 let totalPages   = 1;
@@ -404,7 +380,6 @@ let labels       = {};  // col → Vietnamese label
 // ── INIT ───────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('apiUrlSetup').value = API_BASE;
-  document.getElementById('apiUrlInput').value  = API_BASE;
 
   document.getElementById('searchInput').addEventListener('input', e => {
     clearTimeout(debounceTimer);
@@ -426,23 +401,15 @@ function showSetup() {
 }
 
 function saveApiUrl() {
-  const val = (document.getElementById('apiUrlSetup').value || document.getElementById('apiUrlInput').value)
-    .trim().replace(/\/$/, '');
+  const val = document.getElementById('apiUrlSetup').value.trim().replace(/\/$/, '');
   if (!val) return;
   API_BASE = val;
   localStorage.setItem('api_base', val);
-  document.getElementById('apiUrlInput').value = val;
-  document.getElementById('configPanel').style.display = 'none';
   document.getElementById('apiSetup').style.display = 'none';
   document.getElementById('spinner').style.display = '';
   document.getElementById('overlayMsg').textContent = 'Đang kết nối...';
   document.getElementById('overlay').classList.remove('hidden');
   initApp();
-}
-
-function toggleConfig() {
-  const p = document.getElementById('configPanel');
-  p.style.display = p.style.display === 'none' ? 'block' : 'none';
 }
 
 async function initApp() {
@@ -459,7 +426,6 @@ async function initApp() {
 
     await fetchData();
     document.getElementById('overlay').classList.add('hidden');
-    document.getElementById('configToggle').style.display = 'block';
   } catch(e) {
     document.getElementById('spinner').style.display = 'none';
     document.getElementById('overlayMsg').textContent = '❌ Không kết nối được. Kiểm tra lại URL.';
