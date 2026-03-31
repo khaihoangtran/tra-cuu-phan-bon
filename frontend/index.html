@@ -249,23 +249,6 @@ header{
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 #overlay p{font-size:.9rem;color:var(--muted)}
-.api-setup{
-  background:#fff;border:1px solid var(--border);border-radius:var(--r);
-  padding:24px 28px;width:360px;display:none;box-shadow:var(--shadow-lg);
-}
-.api-setup h2{font-size:1rem;font-weight:700;margin-bottom:14px}
-.api-setup label{font-size:.78rem;color:var(--muted);display:block;margin-bottom:6px}
-.api-setup input{
-  width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;
-  font-family:'Be Vietnam Pro',sans-serif;font-size:.83rem;color:var(--text);
-  outline:none;margin-bottom:12px;
-}
-.api-setup input:focus{border-color:var(--green)}
-.api-save-btn{
-  width:100%;padding:10px;background:var(--green);color:#fff;border:none;
-  border-radius:7px;font-family:'Be Vietnam Pro',sans-serif;font-weight:700;
-  font-size:.87rem;cursor:pointer;
-}
 
 
 mark{background:rgba(45,122,58,.15);color:var(--green);border-radius:3px;padding:0 2px}
@@ -273,16 +256,10 @@ mark{background:rgba(45,122,58,.15);color:var(--green);border-radius:3px;padding
 </head>
 <body>
 
-<!-- OVERLAY / API SETUP -->
+<!-- LOADING OVERLAY -->
 <div id="overlay">
-  <div class="spinner" id="spinner"></div>
+  <div class="spinner"></div>
   <p id="overlayMsg">Đang kết nối...</p>
-  <div class="api-setup" id="apiSetup">
-    <h2>🌿 Cấu hình API</h2>
-    <label>URL Backend (e.g. https://your-app.onrender.com)</label>
-    <input type="text" id="apiUrlSetup" placeholder="https://your-app.onrender.com"/>
-    <button class="api-save-btn" onclick="saveApiUrl()">Kết nối</button>
-  </div>
 </div>
 
 <!-- HEADER -->
@@ -366,10 +343,9 @@ mark{background:rgba(45,122,58,.15);color:var(--green);border-radius:3px;padding
 
 <script>
 // ── STATE ──────────────────────────────────────────
-const DEFAULT_API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:8000'
-  : '';
-let API_BASE     = localStorage.getItem('api_base') || DEFAULT_API;
+  : 'https://tra-cuu-phan-bon-api.onrender.com';
 let currentPage  = 1;
 let currentQuery = '';
 let totalPages   = 1;
@@ -379,8 +355,6 @@ let labels       = {};  // col → Vietnamese label
 
 // ── INIT ───────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('apiUrlSetup').value = API_BASE;
-
   document.getElementById('searchInput').addEventListener('input', e => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
@@ -390,36 +364,15 @@ window.addEventListener('DOMContentLoaded', () => {
     }, 320);
   });
 
-  if (API_BASE) initApp();
-  else showSetup();
-});
-
-function showSetup() {
-  document.getElementById('spinner').style.display = 'none';
-  document.getElementById('overlayMsg').textContent = 'Nhập URL backend để bắt đầu';
-  document.getElementById('apiSetup').style.display = 'block';
-}
-
-function saveApiUrl() {
-  const val = document.getElementById('apiUrlSetup').value.trim().replace(/\/$/, '');
-  if (!val) return;
-  API_BASE = val;
-  localStorage.setItem('api_base', val);
-  document.getElementById('apiSetup').style.display = 'none';
-  document.getElementById('spinner').style.display = '';
-  document.getElementById('overlayMsg').textContent = 'Đang kết nối...';
-  document.getElementById('overlay').classList.remove('hidden');
   initApp();
-}
+});
 
 async function initApp() {
   try {
-    // Load columns + labels
     const colRes  = await fetch(`${API_BASE}/columns`);
     const colData = await colRes.json();
     labels = colData.labels || {};
 
-    // Load filter options
     const fRes  = await fetch(`${API_BASE}/filters`);
     const fData = await fRes.json();
     populateSelect('filterLoai', fData.loai_phan || []);
@@ -427,9 +380,7 @@ async function initApp() {
     await fetchData();
     document.getElementById('overlay').classList.add('hidden');
   } catch(e) {
-    document.getElementById('spinner').style.display = 'none';
-    document.getElementById('overlayMsg').textContent = '❌ Không kết nối được. Kiểm tra lại URL.';
-    document.getElementById('apiSetup').style.display = 'block';
+    document.getElementById('overlayMsg').textContent = '❌ Không kết nối được API.';
   }
 }
 
