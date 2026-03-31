@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: tra-cuu-phan-bon-api
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python load_data.py
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+
+  - type: web
+    name: tra-cuu-phan-bon-frontend
+    env: static
+    rootDir: frontend
+    staticPublishPath: .
+    plan: free
