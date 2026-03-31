@@ -1,515 +1,889 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Tra cứu Phân Bón</title>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<style>
-/* ── TOKENS ─────────────────────────────────────── */
-:root{
-  --bg:        #f0f4f0;
-  --surface:   #ffffff;
-  --surface2:  #f7faf7;
-  --border:    #d8e6d8;
-  --green:     #2d7a3a;
-  --green-lt:  #e8f5e9;
-  --green-mid: #4caf50;
-  --amber:     #e65100;
-  --amber-lt:  #fff3e0;
-  --text:      #1a2e1a;
-  --muted:     #607060;
-  --tag-bg:    #e3f2e1;
-  --tag-text:  #2d6a34;
-  --r:         12px;
-  --shadow:    0 2px 8px rgba(30,70,30,.08);
-  --shadow-lg: 0 8px 32px rgba(30,70,30,.13);
-}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tra cứu Phân Bón</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ── TOKENS ─────────────────────────────────────── */
+      :root {
+        --bg: #f0f4f0;
+        --surface: #ffffff;
+        --surface2: #f7faf7;
+        --border: #d8e6d8;
+        --green: #2d7a3a;
+        --green-lt: #e8f5e9;
+        --green-mid: #4caf50;
+        --amber: #e65100;
+        --amber-lt: #fff3e0;
+        --text: #1a2e1a;
+        --muted: #607060;
+        --tag-bg: #e3f2e1;
+        --tag-text: #2d6a34;
+        --r: 12px;
+        --shadow: 0 2px 8px rgba(30, 70, 30, 0.08);
+        --shadow-lg: 0 8px 32px rgba(30, 70, 30, 0.13);
+      }
 
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-body{
-  font-family:'Be Vietnam Pro',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-}
+      body {
+        font-family: "Be Vietnam Pro", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
 
-/* ── HEADER ─────────────────────────────────────── */
-header{
-  background:var(--green);
-  padding:0 24px;
-  position:sticky;top:0;z-index:100;
-  box-shadow:0 2px 12px rgba(0,0,0,.18);
-}
-.header-inner{
-  max-width:1200px;margin:0 auto;
-  display:flex;align-items:center;gap:16px;
-  padding:14px 0;
-}
-.logo{
-  font-size:1.15rem;font-weight:800;color:#fff;
-  white-space:nowrap;letter-spacing:-.01em;
-  display:flex;align-items:center;gap:8px;
-}
-.logo-icon{font-size:1.4rem}
-.logo span{opacity:.75;font-weight:500}
+      /* ── HEADER ─────────────────────────────────────── */
+      header {
+        background: var(--green);
+        padding: 0 24px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+      }
+      .header-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 0;
+      }
+      .logo {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #fff;
+        white-space: nowrap;
+        letter-spacing: -0.01em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .logo-icon {
+        font-size: 1.4rem;
+      }
+      .logo span {
+        opacity: 0.75;
+        font-weight: 500;
+      }
 
-/* Search bar */
-.search-wrap{flex:1;position:relative;max-width:600px}
-.search-wrap svg{
-  position:absolute;left:13px;top:50%;transform:translateY(-50%);
-  color:#aaa;pointer-events:none
-}
-#searchInput{
-  width:100%;padding:11px 14px 11px 40px;
-  background:#fff;border:2px solid transparent;border-radius:8px;
-  font-family:'Be Vietnam Pro',sans-serif;font-size:.9rem;color:var(--text);
-  outline:none;transition:border-color .2s;
-}
-#searchInput:focus{border-color:var(--green-mid)}
-#searchInput::placeholder{color:#aaa}
-.total-badge{
-  background:rgba(255,255,255,.18);color:#fff;
-  font-size:.75rem;font-weight:600;padding:4px 12px;border-radius:20px;
-  white-space:nowrap;letter-spacing:.03em;
-}
+      /* Search bar */
+      .search-wrap {
+        flex: 1;
+        position: relative;
+        max-width: 600px;
+      }
+      .search-wrap svg {
+        position: absolute;
+        left: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #aaa;
+        pointer-events: none;
+      }
+      #searchInput {
+        width: 100%;
+        padding: 11px 14px 11px 40px;
+        background: #fff;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        font-family: "Be Vietnam Pro", sans-serif;
+        font-size: 0.9rem;
+        color: var(--text);
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      #searchInput:focus {
+        border-color: var(--green-mid);
+      }
+      #searchInput::placeholder {
+        color: #aaa;
+      }
+      .total-badge {
+        background: rgba(255, 255, 255, 0.18);
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 20px;
+        white-space: nowrap;
+        letter-spacing: 0.03em;
+      }
 
-/* ── LAYOUT ──────────────────────────────────────── */
-.page-wrap{max-width:1200px;margin:0 auto;padding:24px 24px 60px}
+      /* ── LAYOUT ──────────────────────────────────────── */
+      .page-wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px 24px 60px;
+      }
 
-/* ── FILTER BAR ──────────────────────────────────── */
-.filter-bar{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);padding:16px 20px;margin-bottom:20px;
-  display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;
-  box-shadow:var(--shadow);
-}
-.filter-group{display:flex;flex-direction:column;gap:5px;min-width:160px}
-.filter-group label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.filter-group select,.filter-group input[type=number]{
-  padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;
-  font-family:'Be Vietnam Pro',sans-serif;font-size:.83rem;color:var(--text);
-  background:var(--surface2);outline:none;transition:border-color .2s;
-}
-.filter-group select:focus,.filter-group input:focus{border-color:var(--green)}
-.range-row{display:flex;gap:6px;align-items:center}
-.range-row span{color:var(--muted);font-size:.8rem}
+      /* ── FILTER BAR ──────────────────────────────────── */
+      .filter-bar {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 16px 20px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: flex-end;
+        box-shadow: var(--shadow);
+      }
+      .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        min-width: 160px;
+      }
+      .filter-group label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .filter-group select,
+      .filter-group input[type="number"] {
+        padding: 8px 10px;
+        border: 1.5px solid var(--border);
+        border-radius: 7px;
+        font-family: "Be Vietnam Pro", sans-serif;
+        font-size: 0.83rem;
+        color: var(--text);
+        background: var(--surface2);
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .filter-group select:focus,
+      .filter-group input:focus {
+        border-color: var(--green);
+      }
+      .range-row {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .range-row span {
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
 
-.filter-actions{display:flex;gap:8px;align-items:flex-end;margin-left:auto}
-.btn-reset{
-  padding:8px 16px;border:1.5px solid var(--border);border-radius:7px;
-  background:#fff;color:var(--muted);font-family:'Be Vietnam Pro',sans-serif;
-  font-size:.82rem;cursor:pointer;transition:all .15s;
-}
-.btn-reset:hover{border-color:var(--green);color:var(--green)}
-.btn-search{
-  padding:8px 20px;background:var(--green);border:none;border-radius:7px;
-  color:#fff;font-family:'Be Vietnam Pro',sans-serif;font-weight:700;
-  font-size:.82rem;cursor:pointer;transition:opacity .15s;
-}
-.btn-search:hover{opacity:.85}
+      .filter-actions {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+        margin-left: auto;
+      }
+      .btn-reset {
+        padding: 8px 16px;
+        border: 1.5px solid var(--border);
+        border-radius: 7px;
+        background: #fff;
+        color: var(--muted);
+        font-family: "Be Vietnam Pro", sans-serif;
+        font-size: 0.82rem;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .btn-reset:hover {
+        border-color: var(--green);
+        color: var(--green);
+      }
+      .btn-search {
+        padding: 8px 20px;
+        background: var(--green);
+        border: none;
+        border-radius: 7px;
+        color: #fff;
+        font-family: "Be Vietnam Pro", sans-serif;
+        font-weight: 700;
+        font-size: 0.82rem;
+        cursor: pointer;
+        transition: opacity 0.15s;
+      }
+      .btn-search:hover {
+        opacity: 0.85;
+      }
 
-/* ── STATUS ──────────────────────────────────────── */
-.status-bar{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:16px;font-size:.8rem;color:var(--muted);flex-wrap:wrap;gap:8px;
-}
-.status-bar strong{color:var(--green);font-weight:700}
+      /* ── STATUS ──────────────────────────────────────── */
+      .status-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        font-size: 0.8rem;
+        color: var(--muted);
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .status-bar strong {
+        color: var(--green);
+        font-weight: 700;
+      }
 
-/* ── CARDS GRID ──────────────────────────────────── */
-.cards-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-  gap:16px;
-}
+      /* ── CARDS GRID ──────────────────────────────────── */
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 16px;
+      }
 
-/* ── CARD ────────────────────────────────────────── */
-.card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);padding:0;
-  box-shadow:var(--shadow);transition:box-shadow .18s,transform .18s;
-  display:flex;flex-direction:column;overflow:hidden;
-}
-.card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+      /* ── CARD ────────────────────────────────────────── */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 0;
+        box-shadow: var(--shadow);
+        transition:
+          box-shadow 0.18s,
+          transform 0.18s;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .card:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-2px);
+      }
 
-.card-header{
-  padding:14px 16px 12px;border-bottom:1px solid var(--border);
-  background:linear-gradient(135deg,var(--green-lt) 0%,#fff 100%);
-}
-.card-mspb{
-  font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:500;
-  color:var(--green);background:var(--green-lt);
-  padding:2px 8px;border-radius:4px;display:inline-block;margin-bottom:6px;
-}
-.card-name{
-  font-size:.97rem;font-weight:700;color:var(--text);
-  line-height:1.35;margin-bottom:6px;
-}
-.card-type{
-  font-size:.75rem;color:var(--tag-text);background:var(--tag-bg);
-  padding:3px 9px;border-radius:20px;display:inline-block;font-weight:600;
-}
-.card-status-yes{color:#2d7a3a;background:#e8f5e9;padding:3px 9px;border-radius:20px;font-size:.72rem;font-weight:700}
-.card-status-no {color:#b71c1c;background:#ffebee;padding:3px 9px;border-radius:20px;font-size:.72rem;font-weight:700}
+      .card-header {
+        padding: 14px 16px 12px;
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(135deg, var(--green-lt) 0%, #fff 100%);
+      }
+      .card-mspb {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.72rem;
+        font-weight: 500;
+        color: var(--green);
+        background: var(--green-lt);
+        padding: 2px 8px;
+        border-radius: 4px;
+        display: inline-block;
+        margin-bottom: 6px;
+      }
+      .card-name {
+        font-size: 0.97rem;
+        font-weight: 700;
+        color: var(--text);
+        line-height: 1.35;
+        margin-bottom: 6px;
+      }
+      .card-type {
+        font-size: 0.75rem;
+        color: var(--tag-text);
+        background: var(--tag-bg);
+        padding: 3px 9px;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: 600;
+      }
+      .card-status-yes {
+        color: #2d7a3a;
+        background: #e8f5e9;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-size: 0.72rem;
+        font-weight: 700;
+      }
+      .card-status-no {
+        color: #b71c1c;
+        background: #ffebee;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-size: 0.72rem;
+        font-weight: 700;
+      }
 
-.card-body{padding:14px 16px;flex:1;display:flex;flex-direction:column;gap:10px}
+      .card-body {
+        padding: 14px 16px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
 
-/* Registration row */
-.card-reg{
-  display:flex;flex-wrap:wrap;gap:6px;
-  font-size:.76rem;color:var(--muted);
-}
-.card-reg .reg-item{display:flex;gap:4px;align-items:center}
-.card-reg .reg-label{font-weight:600;color:var(--text)}
+      /* Registration row */
+      .card-reg {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        font-size: 0.76rem;
+        color: var(--muted);
+      }
+      .card-reg .reg-item {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+      .card-reg .reg-label {
+        font-weight: 600;
+        color: var(--text);
+      }
 
-/* Nutrients */
-.nutrients-section{}
-.nutrients-title{
-  font-size:.7rem;font-weight:700;text-transform:uppercase;
-  letter-spacing:.07em;color:var(--muted);margin-bottom:6px;
-}
-.nutrients-grid{display:flex;flex-wrap:wrap;gap:5px}
-.nutrient-chip{
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:6px;padding:4px 9px;
-  font-size:.74rem;font-weight:600;color:var(--text);
-  display:flex;align-items:baseline;gap:3px;
-}
-.nutrient-chip .nut-label{color:var(--muted);font-weight:500}
-.nutrient-chip .nut-val{color:var(--green);font-family:'JetBrains Mono',monospace;font-size:.78rem}
-.nutrient-chip .nut-unit{color:var(--muted);font-size:.68rem}
+      /* Nutrients */
+      .nutrients-section {
+      }
+      .nutrients-title {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      .nutrients-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .nutrient-chip {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 4px 9px;
+        font-size: 0.74rem;
+        font-weight: 600;
+        color: var(--text);
+        display: flex;
+        align-items: baseline;
+        gap: 3px;
+      }
+      .nutrient-chip .nut-label {
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .nutrient-chip .nut-val {
+        color: var(--green);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.78rem;
+      }
+      .nutrient-chip .nut-unit {
+        color: var(--muted);
+        font-size: 0.68rem;
+      }
 
-/* Composition */
-.card-comp{
-  font-size:.76rem;color:var(--muted);line-height:1.55;
-  max-height:80px;overflow:hidden;position:relative;
-}
-.card-comp.expanded{max-height:none}
-.comp-toggle{
-  font-size:.72rem;color:var(--green);cursor:pointer;
-  font-weight:600;background:none;border:none;padding:0;margin-top:3px;
-  display:block;
-}
+      /* Composition */
+      .card-comp {
+        font-size: 0.76rem;
+        color: var(--muted);
+        line-height: 1.55;
+        max-height: 80px;
+        overflow: hidden;
+        position: relative;
+      }
+      .card-comp.expanded {
+        max-height: none;
+      }
+      .comp-toggle {
+        font-size: 0.72rem;
+        color: var(--green);
+        cursor: pointer;
+        font-weight: 600;
+        background: none;
+        border: none;
+        padding: 0;
+        margin-top: 3px;
+        display: block;
+      }
 
-/* Validity */
-.card-validity{
-  font-size:.74rem;border-top:1px solid var(--border);
-  padding-top:10px;margin-top:2px;
-  display:flex;gap:14px;flex-wrap:wrap;
-}
-.validity-item{display:flex;gap:4px;align-items:center}
-.validity-label{color:var(--muted);font-weight:600}
-.validity-val{color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.76rem}
+      /* Validity */
+      .card-validity {
+        font-size: 0.74rem;
+        border-top: 1px solid var(--border);
+        padding-top: 10px;
+        margin-top: 2px;
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .validity-item {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+      .validity-label {
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .validity-val {
+        color: var(--text);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.76rem;
+      }
 
-/* ── SKELETON CARDS ──────────────────────────────── */
-.skel-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);padding:16px;height:220px;
-  box-shadow:var(--shadow);
-}
-.skel-line{
-  height:12px;border-radius:4px;margin-bottom:10px;
-  background:linear-gradient(90deg,#e8f0e8 25%,#f2f7f2 50%,#e8f0e8 75%);
-  background-size:200% 100%;animation:shimmer 1.4s infinite;
-}
-@keyframes shimmer{to{background-position:-200% 0}}
+      /* ── SKELETON CARDS ──────────────────────────────── */
+      .skel-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 16px;
+        height: 220px;
+        box-shadow: var(--shadow);
+      }
+      .skel-line {
+        height: 12px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        background: linear-gradient(
+          90deg,
+          #e8f0e8 25%,
+          #f2f7f2 50%,
+          #e8f0e8 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.4s infinite;
+      }
+      @keyframes shimmer {
+        to {
+          background-position: -200% 0;
+        }
+      }
 
-/* ── EMPTY STATE ─────────────────────────────────── */
-.empty-state{
-  grid-column:1/-1;text-align:center;padding:64px 20px;color:var(--muted);
-}
-.empty-icon{font-size:3rem;margin-bottom:12px}
-.empty-state p{font-size:.9rem}
+      /* ── EMPTY STATE ─────────────────────────────────── */
+      .empty-state {
+        grid-column: 1/-1;
+        text-align: center;
+        padding: 64px 20px;
+        color: var(--muted);
+      }
+      .empty-icon {
+        font-size: 3rem;
+        margin-bottom: 12px;
+      }
+      .empty-state p {
+        font-size: 0.9rem;
+      }
 
-/* ── PAGINATION ──────────────────────────────────── */
-.pagination{
-  margin-top:28px;display:flex;justify-content:center;
-  gap:6px;flex-wrap:wrap;
-}
-.page-btn{
-  padding:7px 14px;border-radius:7px;border:1.5px solid var(--border);
-  background:#fff;color:var(--text);font-family:'Be Vietnam Pro',sans-serif;
-  font-size:.8rem;cursor:pointer;transition:all .15s;
-}
-.page-btn:hover:not(:disabled){border-color:var(--green);color:var(--green)}
-.page-btn.active{background:var(--green);color:#fff;border-color:var(--green);font-weight:700}
-.page-btn:disabled{opacity:.3;cursor:default}
+      /* ── PAGINATION ──────────────────────────────────── */
+      .pagination {
+        margin-top: 28px;
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .page-btn {
+        padding: 7px 14px;
+        border-radius: 7px;
+        border: 1.5px solid var(--border);
+        background: #fff;
+        color: var(--text);
+        font-family: "Be Vietnam Pro", sans-serif;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .page-btn:hover:not(:disabled) {
+        border-color: var(--green);
+        color: var(--green);
+      }
+      .page-btn.active {
+        background: var(--green);
+        color: #fff;
+        border-color: var(--green);
+        font-weight: 700;
+      }
+      .page-btn:disabled {
+        opacity: 0.3;
+        cursor: default;
+      }
 
-/* ── OVERLAY ─────────────────────────────────────── */
-#overlay{
-  position:fixed;inset:0;background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  z-index:999;gap:16px;
-}
-#overlay.hidden{display:none}
-.spinner{
-  width:38px;height:38px;border:3px solid var(--border);
-  border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-#overlay p{font-size:.9rem;color:var(--muted)}
+      /* ── OVERLAY ─────────────────────────────────────── */
+      #overlay {
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        gap: 16px;
+      }
+      #overlay.hidden {
+        display: none;
+      }
+      .spinner {
+        width: 38px;
+        height: 38px;
+        border: 3px solid var(--border);
+        border-top-color: var(--green);
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      #overlay p {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
 
-
-mark{background:rgba(45,122,58,.15);color:var(--green);border-radius:3px;padding:0 2px}
-</style>
-</head>
-<body>
-
-<!-- LOADING OVERLAY -->
-<div id="overlay">
-  <div class="spinner"></div>
-  <p id="overlayMsg">Đang kết nối...</p>
-</div>
-
-<!-- HEADER -->
-<header>
-  <div class="header-inner">
-    <div class="logo"><span class="logo-icon">🌿</span> Tra cứu <span>Phân Bón</span></div>
-    <div class="search-wrap">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input id="searchInput" type="text" placeholder="Tìm theo tên, loại, mã số, thành phần…" autocomplete="off"/>
+      mark {
+        background: rgba(45, 122, 58, 0.15);
+        color: var(--green);
+        border-radius: 3px;
+        padding: 0 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- LOADING OVERLAY -->
+    <div id="overlay">
+      <div class="spinner"></div>
+      <p id="overlayMsg">Đang kết nối...</p>
     </div>
-    <div class="total-badge" id="totalBadge">—</div>
-  </div>
-</header>
 
-<div class="page-wrap">
-
-  <!-- FILTER BAR -->
-  <div class="filter-bar" id="filterBar">
-
-    <div class="filter-group" style="min-width:200px">
-      <label>Loại phân</label>
-      <select id="filterLoai" onchange="applyFilters()">
-        <option value="">-- Tất cả loại --</option>
-      </select>
-    </div>
-
-    <div class="filter-group">
-      <label>Trạng thái</label>
-      <select id="filterGhiChu" onchange="applyFilters()">
-        <option value="">-- Tất cả --</option>
-        <option value="YES">✅ Còn lưu hành</option>
-        <option value="NO">❌ Hết lưu hành</option>
-      </select>
-    </div>
-
-    <div class="filter-group">
-      <label>Đạm tổng số (%)</label>
-      <div class="range-row">
-        <input type="number" id="damMin" placeholder="Từ" min="0" max="100" step="0.1" oninput="debounceFilters()"/>
-        <span>–</span>
-        <input type="number" id="damMax" placeholder="Đến" min="0" max="100" step="0.1" oninput="debounceFilters()"/>
+    <!-- HEADER -->
+    <header>
+      <div class="header-inner">
+        <div class="logo">
+          <span class="logo-icon">🌿</span> Tra cứu <span>Phân Bón</span>
+        </div>
+        <div class="search-wrap">
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="Tìm theo tên, loại, mã số, thành phần…"
+            autocomplete="off"
+          />
+        </div>
+        <div class="total-badge" id="totalBadge">—</div>
       </div>
-    </div>
+    </header>
 
-    <div class="filter-group">
-      <label>Lân hữu hiệu (%)</label>
-      <div class="range-row">
-        <input type="number" id="lanMin" placeholder="Từ" min="0" max="100" step="0.1" oninput="debounceFilters()"/>
-        <span>–</span>
-        <input type="number" id="lanMax" placeholder="Đến" min="0" max="100" step="0.1" oninput="debounceFilters()"/>
+    <div class="page-wrap">
+      <!-- FILTER BAR -->
+      <div class="filter-bar" id="filterBar">
+        <div class="filter-group" style="min-width: 200px">
+          <label>Loại phân</label>
+          <select id="filterLoai" onchange="applyFilters()">
+            <option value="">-- Tất cả loại --</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Trạng thái</label>
+          <select id="filterGhiChu" onchange="applyFilters()">
+            <option value="">-- Tất cả --</option>
+            <option value="YES">✅ Còn lưu hành</option>
+            <option value="NO">❌ Hết lưu hành</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Đạm tổng số (%)</label>
+          <div class="range-row">
+            <input
+              type="number"
+              id="damMin"
+              placeholder="Từ"
+              min="0"
+              max="100"
+              step="0.1"
+              oninput="debounceFilters()"
+            />
+            <span>–</span>
+            <input
+              type="number"
+              id="damMax"
+              placeholder="Đến"
+              min="0"
+              max="100"
+              step="0.1"
+              oninput="debounceFilters()"
+            />
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label>Lân hữu hiệu (%)</label>
+          <div class="range-row">
+            <input
+              type="number"
+              id="lanMin"
+              placeholder="Từ"
+              min="0"
+              max="100"
+              step="0.1"
+              oninput="debounceFilters()"
+            />
+            <span>–</span>
+            <input
+              type="number"
+              id="lanMax"
+              placeholder="Đến"
+              min="0"
+              max="100"
+              step="0.1"
+              oninput="debounceFilters()"
+            />
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label>Kali hữu hiệu (%)</label>
+          <div class="range-row">
+            <input
+              type="number"
+              id="kaliMin"
+              placeholder="Từ"
+              min="0"
+              max="100"
+              step="0.1"
+              oninput="debounceFilters()"
+            />
+            <span>–</span>
+            <input
+              type="number"
+              id="kaliMax"
+              placeholder="Đến"
+              min="0"
+              max="100"
+              step="0.1"
+              oninput="debounceFilters()"
+            />
+          </div>
+        </div>
+
+        <div class="filter-actions">
+          <button class="btn-reset" onclick="resetFilters()">↺ Xoá lọc</button>
+        </div>
       </div>
-    </div>
 
-    <div class="filter-group">
-      <label>Kali hữu hiệu (%)</label>
-      <div class="range-row">
-        <input type="number" id="kaliMin" placeholder="Từ" min="0" max="100" step="0.1" oninput="debounceFilters()"/>
-        <span>–</span>
-        <input type="number" id="kaliMax" placeholder="Đến" min="0" max="100" step="0.1" oninput="debounceFilters()"/>
+      <!-- STATUS -->
+      <div class="status-bar">
+        <div id="statusText">—</div>
+        <div id="statusPage"></div>
       </div>
+
+      <!-- CARDS -->
+      <div class="cards-grid" id="cardsGrid"></div>
+
+      <!-- PAGINATION -->
+      <div class="pagination" id="pagination"></div>
     </div>
 
-    <div class="filter-actions">
-      <button class="btn-reset" onclick="resetFilters()">↺ Xoá lọc</button>
-    </div>
-  </div>
+    <script>
+      // ── STATE ──────────────────────────────────────────
+      const API_BASE =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1"
+          ? "http://localhost:8000"
+          : "https://tra-cuu-phan-bon.onrender.com";
+      let currentPage = 1;
+      let currentQuery = "";
+      let totalPages = 1;
+      let debounceTimer;
+      let filterDebounce;
+      let labels = {}; // col → Vietnamese label
 
-  <!-- STATUS -->
-  <div class="status-bar">
-    <div id="statusText">—</div>
-    <div id="statusPage"></div>
-  </div>
+      // ── INIT ───────────────────────────────────────────
+      window.addEventListener("DOMContentLoaded", () => {
+        document
+          .getElementById("searchInput")
+          .addEventListener("input", (e) => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+              currentQuery = e.target.value.trim();
+              currentPage = 1;
+              fetchData();
+            }, 320);
+          });
 
-  <!-- CARDS -->
-  <div class="cards-grid" id="cardsGrid"></div>
+        initApp();
+      });
 
-  <!-- PAGINATION -->
-  <div class="pagination" id="pagination"></div>
-</div>
+      async function initApp() {
+        try {
+          const colRes = await fetch(`${API_BASE}/columns`);
+          const colData = await colRes.json();
+          labels = colData.labels || {};
 
+          const fRes = await fetch(`${API_BASE}/filters`);
+          const fData = await fRes.json();
+          populateSelect("filterLoai", fData.loai_phan || []);
 
-<script>
-// ── STATE ──────────────────────────────────────────
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:8000'
-  : 'https://tra-cuu-phan-bon-api.onrender.com';
-let currentPage  = 1;
-let currentQuery = '';
-let totalPages   = 1;
-let debounceTimer;
-let filterDebounce;
-let labels       = {};  // col → Vietnamese label
+          await fetchData();
+          document.getElementById("overlay").classList.add("hidden");
+        } catch (e) {
+          document.getElementById("overlayMsg").textContent =
+            "❌ Không kết nối được API.";
+        }
+      }
 
-// ── INIT ───────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('searchInput').addEventListener('input', e => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      currentQuery = e.target.value.trim();
-      currentPage = 1;
-      fetchData();
-    }, 320);
-  });
+      function populateSelect(id, values) {
+        const sel = document.getElementById(id);
+        values.forEach((v) => {
+          const o = document.createElement("option");
+          o.value = o.textContent = v;
+          sel.appendChild(o);
+        });
+      }
 
-  initApp();
-});
+      // ── FILTERS ────────────────────────────────────────
+      function applyFilters() {
+        currentPage = 1;
+        fetchData();
+      }
+      function debounceFilters() {
+        clearTimeout(filterDebounce);
+        filterDebounce = setTimeout(() => {
+          currentPage = 1;
+          fetchData();
+        }, 500);
+      }
 
-async function initApp() {
-  try {
-    const colRes  = await fetch(`${API_BASE}/columns`);
-    const colData = await colRes.json();
-    labels = colData.labels || {};
+      function resetFilters() {
+        ["filterLoai", "filterGhiChu"].forEach(
+          (id) => (document.getElementById(id).value = ""),
+        );
+        ["damMin", "damMax", "lanMin", "lanMax", "kaliMin", "kaliMax"].forEach(
+          (id) => (document.getElementById(id).value = ""),
+        );
+        currentPage = 1;
+        fetchData();
+      }
 
-    const fRes  = await fetch(`${API_BASE}/filters`);
-    const fData = await fRes.json();
-    populateSelect('filterLoai', fData.loai_phan || []);
+      function buildUrl() {
+        const params = new URLSearchParams();
+        params.set("q", currentQuery);
+        params.set("page", currentPage);
 
-    await fetchData();
-    document.getElementById('overlay').classList.add('hidden');
-  } catch(e) {
-    document.getElementById('overlayMsg').textContent = '❌ Không kết nối được API.';
-  }
-}
+        const loai = document.getElementById("filterLoai").value;
+        const ghiChu = document.getElementById("filterGhiChu").value;
+        const damMin = document.getElementById("damMin").value;
+        const damMax = document.getElementById("damMax").value;
+        const lanMin = document.getElementById("lanMin").value;
+        const lanMax = document.getElementById("lanMax").value;
+        const kMin = document.getElementById("kaliMin").value;
+        const kMax = document.getElementById("kaliMax").value;
 
-function populateSelect(id, values) {
-  const sel = document.getElementById(id);
-  values.forEach(v => {
-    const o = document.createElement('option');
-    o.value = o.textContent = v;
-    sel.appendChild(o);
-  });
-}
+        if (loai) params.set("loai_phan", loai);
+        if (ghiChu) params.set("ghi_chu", ghiChu);
+        if (damMin) params.set("dam_min", damMin);
+        if (damMax) params.set("dam_max", damMax);
+        if (lanMin) params.set("lan_min", lanMin);
+        if (lanMax) params.set("lan_max", lanMax);
+        if (kMin) params.set("kali_min", kMin);
+        if (kMax) params.set("kali_max", kMax);
 
-// ── FILTERS ────────────────────────────────────────
-function applyFilters() { currentPage = 1; fetchData(); }
-function debounceFilters() {
-  clearTimeout(filterDebounce);
-  filterDebounce = setTimeout(() => { currentPage = 1; fetchData(); }, 500);
-}
+        return `${API_BASE}/search?${params.toString()}`;
+      }
 
-function resetFilters() {
-  ['filterLoai','filterGhiChu'].forEach(id => document.getElementById(id).value = '');
-  ['damMin','damMax','lanMin','lanMax','kaliMin','kaliMax'].forEach(id => document.getElementById(id).value = '');
-  currentPage = 1;
-  fetchData();
-}
+      // ── FETCH DATA ─────────────────────────────────────
+      async function fetchData() {
+        showSkeleton();
+        try {
+          const res = await fetch(buildUrl());
+          const data = await res.json();
+          totalPages = data.pages || 1;
+          renderCards(data.data, data.total);
+          renderPagination();
+          updateStatus(data.total, data.page, data.pages);
+        } catch (e) {
+          document.getElementById("cardsGrid").innerHTML =
+            `<div class="empty-state"><div class="empty-icon">⚠️</div><p>Lỗi kết nối. API có đang chạy không?</p></div>`;
+        }
+      }
 
-function buildUrl() {
-  const params = new URLSearchParams();
-  params.set('q', currentQuery);
-  params.set('page', currentPage);
+      // ── RENDER CARDS ───────────────────────────────────
+      function renderCards(rows, total) {
+        const grid = document.getElementById("cardsGrid");
+        if (!rows.length) {
+          grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>Không tìm thấy kết quả phù hợp.</p></div>`;
+          return;
+        }
+        grid.innerHTML = rows.map((r) => buildCard(r)).join("");
 
-  const loai   = document.getElementById('filterLoai').value;
-  const ghiChu = document.getElementById('filterGhiChu').value;
-  const damMin = document.getElementById('damMin').value;
-  const damMax = document.getElementById('damMax').value;
-  const lanMin = document.getElementById('lanMin').value;
-  const lanMax = document.getElementById('lanMax').value;
-  const kMin   = document.getElementById('kaliMin').value;
-  const kMax   = document.getElementById('kaliMax').value;
+        // toggle composition expand
+        grid.querySelectorAll(".comp-toggle").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const comp = btn.previousElementSibling;
+            comp.classList.toggle("expanded");
+            btn.textContent = comp.classList.contains("expanded")
+              ? "▲ Thu gọn"
+              : "▼ Xem thêm";
+          });
+        });
+      }
 
-  if (loai)   params.set('loai_phan', loai);
-  if (ghiChu) params.set('ghi_chu', ghiChu);
-  if (damMin) params.set('dam_min', damMin);
-  if (damMax) params.set('dam_max', damMax);
-  if (lanMin) params.set('lan_min', lanMin);
-  if (lanMax) params.set('lan_max', lanMax);
-  if (kMin)   params.set('kali_min', kMin);
-  if (kMax)   params.set('kali_max', kMax);
+      function buildCard(r) {
+        const q = currentQuery;
+        const hl = (v) => (v ? highlight(esc(String(v)), q) : "—");
 
-  return `${API_BASE}/search?${params.toString()}`;
-}
+        // Status badge
+        const statusBadge =
+          r.ghi_chu === "YES"
+            ? `<span class="card-status-yes">✅ Còn lưu hành</span>`
+            : r.ghi_chu === "NO"
+              ? `<span class="card-status-no">❌ Hết lưu hành</span>`
+              : "";
 
-// ── FETCH DATA ─────────────────────────────────────
-async function fetchData() {
-  showSkeleton();
-  try {
-    const res  = await fetch(buildUrl());
-    const data = await res.json();
-    totalPages = data.pages || 1;
-    renderCards(data.data, data.total);
-    renderPagination();
-    updateStatus(data.total, data.page, data.pages);
-  } catch(e) {
-    document.getElementById('cardsGrid').innerHTML =
-      `<div class="empty-state"><div class="empty-icon">⚠️</div><p>Lỗi kết nối. API có đang chạy không?</p></div>`;
-  }
-}
-
-// ── RENDER CARDS ───────────────────────────────────
-function renderCards(rows, total) {
-  const grid = document.getElementById('cardsGrid');
-  if (!rows.length) {
-    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>Không tìm thấy kết quả phù hợp.</p></div>`;
-    return;
-  }
-  grid.innerHTML = rows.map(r => buildCard(r)).join('');
-
-  // toggle composition expand
-  grid.querySelectorAll('.comp-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const comp = btn.previousElementSibling;
-      comp.classList.toggle('expanded');
-      btn.textContent = comp.classList.contains('expanded') ? '▲ Thu gọn' : '▼ Xem thêm';
-    });
-  });
-}
-
-function buildCard(r) {
-  const q = currentQuery;
-  const hl = (v) => v ? highlight(esc(String(v)), q) : '—';
-
-  // Status badge
-  const statusBadge = r.ghi_chu === 'YES'
-    ? `<span class="card-status-yes">✅ Còn lưu hành</span>`
-    : r.ghi_chu === 'NO'
-    ? `<span class="card-status-no">❌ Hết lưu hành</span>`
-    : '';
-
-  // Nutrients chips — only show non-null ones
-  const NUTRIENTS = [
-    {key:'dam_tong_so_pct',   label:'N',    unit:'%'},
-    {key:'lan_huu_hieu_pct',  label:'P₂O₅', unit:'%'},
-    {key:'kali_huu_hieu_pct', label:'K₂O',  unit:'%'},
-    {key:'canxi_pct',         label:'Ca',   unit:'%'},
-    {key:'magie_pct',         label:'Mg',   unit:'%'},
-    {key:'luu_huynh_pct',     label:'S',    unit:'%'},
-    {key:'dong_ppm',          label:'Cu',   unit:'ppm'},
-    {key:'sat_ppm',           label:'Fe',   unit:'ppm'},
-    {key:'kem_ppm',           label:'Zn',   unit:'ppm'},
-    {key:'bo_ppm',            label:'B',    unit:'ppm'},
-    {key:'mangan_ppm',        label:'Mn',   unit:'ppm'},
-    {key:'chat_huu_co_pct',   label:'Hữu cơ', unit:'%'},
-    {key:'axit_humic_pct',    label:'Humic',  unit:'%'},
-    {key:'ph_h2o',            label:'pH',     unit:''},
-  ];
-  const chips = NUTRIENTS.filter(n => r[n.key] != null && r[n.key] !== '')
-    .map(n => `<div class="nutrient-chip">
+        // Nutrients chips — only show non-null ones
+        const NUTRIENTS = [
+          { key: "dam_tong_so_pct", label: "N", unit: "%" },
+          { key: "lan_huu_hieu_pct", label: "P₂O₅", unit: "%" },
+          { key: "kali_huu_hieu_pct", label: "K₂O", unit: "%" },
+          { key: "canxi_pct", label: "Ca", unit: "%" },
+          { key: "magie_pct", label: "Mg", unit: "%" },
+          { key: "luu_huynh_pct", label: "S", unit: "%" },
+          { key: "dong_ppm", label: "Cu", unit: "ppm" },
+          { key: "sat_ppm", label: "Fe", unit: "ppm" },
+          { key: "kem_ppm", label: "Zn", unit: "ppm" },
+          { key: "bo_ppm", label: "B", unit: "ppm" },
+          { key: "mangan_ppm", label: "Mn", unit: "ppm" },
+          { key: "chat_huu_co_pct", label: "Hữu cơ", unit: "%" },
+          { key: "axit_humic_pct", label: "Humic", unit: "%" },
+          { key: "ph_h2o", label: "pH", unit: "" },
+        ];
+        const chips = NUTRIENTS.filter(
+          (n) => r[n.key] != null && r[n.key] !== "",
+        )
+          .map(
+            (n) => `<div class="nutrient-chip">
       <span class="nut-label">${n.label}</span>
-      <span class="nut-val">${parseFloat(r[n.key]).toLocaleString('vi-VN')}</span>
-      ${n.unit ? `<span class="nut-unit">${n.unit}</span>` : ''}
-    </div>`).join('');
+      <span class="nut-val">${parseFloat(r[n.key]).toLocaleString("vi-VN")}</span>
+      ${n.unit ? `<span class="nut-unit">${n.unit}</span>` : ""}
+    </div>`,
+          )
+          .join("");
 
-  // Composition — raw text
-  const comp = r.thanh_phan
-    ? `<div class="card-comp">${hl(r.thanh_phan)}</div>
+        // Composition — raw text
+        const comp = r.thanh_phan
+          ? `<div class="card-comp">${hl(r.thanh_phan)}</div>
        <button class="comp-toggle">▼ Xem thêm</button>`
-    : '';
+          : "";
 
-  return `
+        return `
   <div class="card">
     <div class="card-header">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
@@ -519,37 +893,47 @@ function buildCard(r) {
         </div>
         <div style="flex-shrink:0">${statusBadge}</div>
       </div>
-      ${r.loai_phan ? `<div class="card-type">${hl(r.loai_phan)}</div>` : ''}
+      ${r.loai_phan ? `<div class="card-type">${hl(r.loai_phan)}</div>` : ""}
     </div>
     <div class="card-body">
       <!-- Registration info -->
       <div class="card-reg">
-        ${r.ma_so_phan_bon ? `<div class="reg-item"><span class="reg-label">Mã số:</span> ${hl(r.ma_so_phan_bon)}</div>` : ''}
-        ${r.so_quyet_dinh  ? `<div class="reg-item"><span class="reg-label">QĐ:</span> ${hl(r.so_quyet_dinh)}</div>` : ''}
+        ${r.ma_so_phan_bon ? `<div class="reg-item"><span class="reg-label">Mã số:</span> ${hl(r.ma_so_phan_bon)}</div>` : ""}
+        ${r.so_quyet_dinh ? `<div class="reg-item"><span class="reg-label">QĐ:</span> ${hl(r.so_quyet_dinh)}</div>` : ""}
       </div>
 
       <!-- Nutrients -->
-      ${chips ? `<div class="nutrients-section">
+      ${
+        chips
+          ? `<div class="nutrients-section">
         <div class="nutrients-title">Thành phần dinh dưỡng</div>
         <div class="nutrients-grid">${chips}</div>
-      </div>` : ''}
+      </div>`
+          : ""
+      }
 
       <!-- Composition text -->
-      ${comp ? `<div>${comp}</div>` : ''}
+      ${comp ? `<div>${comp}</div>` : ""}
 
       <!-- Validity dates -->
-      ${(r.ngay_cap || r.ngay_het_han) ? `
+      ${
+        r.ngay_cap || r.ngay_het_han
+          ? `
       <div class="card-validity">
-        ${r.ngay_cap     ? `<div class="validity-item"><span class="validity-label">Cấp:</span><span class="validity-val">${hl(r.ngay_cap)}</span></div>` : ''}
-        ${r.ngay_het_han ? `<div class="validity-item"><span class="validity-label">Hết hạn:</span><span class="validity-val">${hl(r.ngay_het_han)}</span></div>` : ''}
-      </div>` : ''}
+        ${r.ngay_cap ? `<div class="validity-item"><span class="validity-label">Cấp:</span><span class="validity-val">${hl(r.ngay_cap)}</span></div>` : ""}
+        ${r.ngay_het_han ? `<div class="validity-item"><span class="validity-label">Hết hạn:</span><span class="validity-val">${hl(r.ngay_het_han)}</span></div>` : ""}
+      </div>`
+          : ""
+      }
     </div>
   </div>`;
-}
+      }
 
-// ── SKELETON ───────────────────────────────────────
-function showSkeleton() {
-  document.getElementById('cardsGrid').innerHTML = Array.from({length:8}, () => `
+      // ── SKELETON ───────────────────────────────────────
+      function showSkeleton() {
+        document.getElementById("cardsGrid").innerHTML = Array.from(
+          { length: 8 },
+          () => `
     <div class="skel-card">
       <div class="skel-line" style="width:30%;height:10px"></div>
       <div class="skel-line" style="width:70%;height:14px;margin-top:6px"></div>
@@ -557,56 +941,70 @@ function showSkeleton() {
       <div class="skel-line" style="width:100%;height:10px;margin-top:18px"></div>
       <div class="skel-line" style="width:85%;height:10px"></div>
       <div class="skel-line" style="width:60%;height:10px"></div>
-    </div>`).join('');
-}
+    </div>`,
+        ).join("");
+      }
 
-// ── STATUS ─────────────────────────────────────────
-function updateStatus(total, page, pages) {
-  document.getElementById('statusText').innerHTML =
-    `<strong>${total.toLocaleString('vi-VN')}</strong> kết quả`;
-  document.getElementById('statusPage').innerHTML =
-    `Trang <strong>${page}</strong> / ${pages}`;
-  document.getElementById('totalBadge').textContent =
-    total.toLocaleString('vi-VN') + ' phân bón';
-}
+      // ── STATUS ─────────────────────────────────────────
+      function updateStatus(total, page, pages) {
+        document.getElementById("statusText").innerHTML =
+          `<strong>${total.toLocaleString("vi-VN")}</strong> kết quả`;
+        document.getElementById("statusPage").innerHTML =
+          `Trang <strong>${page}</strong> / ${pages}`;
+        document.getElementById("totalBadge").textContent =
+          total.toLocaleString("vi-VN") + " phân bón";
+      }
 
-// ── PAGINATION ─────────────────────────────────────
-function renderPagination() {
-  const el = document.getElementById('pagination');
-  if (totalPages <= 1) { el.innerHTML = ''; return; }
-  const range = getRange(currentPage, totalPages);
-  let h = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>← Trước</button>`;
-  range.forEach(p => {
-    if (p === '…') { h += `<span style="padding:0 4px;color:var(--muted)">…</span>`; return; }
-    h += `<button class="page-btn${p===currentPage?' active':''}" onclick="goPage(${p})">${p}</button>`;
-  });
-  h += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>Sau →</button>`;
-  el.innerHTML = h;
-}
+      // ── PAGINATION ─────────────────────────────────────
+      function renderPagination() {
+        const el = document.getElementById("pagination");
+        if (totalPages <= 1) {
+          el.innerHTML = "";
+          return;
+        }
+        const range = getRange(currentPage, totalPages);
+        let h = `<button class="page-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>← Trước</button>`;
+        range.forEach((p) => {
+          if (p === "…") {
+            h += `<span style="padding:0 4px;color:var(--muted)">…</span>`;
+            return;
+          }
+          h += `<button class="page-btn${p === currentPage ? " active" : ""}" onclick="goPage(${p})">${p}</button>`;
+        });
+        h += `<button class="page-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>Sau →</button>`;
+        el.innerHTML = h;
+      }
 
-function getRange(cur, total) {
-  if (total <= 7) return Array.from({length:total},(_,i)=>i+1);
-  if (cur <= 4)      return [1,2,3,4,5,'…',total];
-  if (cur >= total-3) return [1,'…',total-4,total-3,total-2,total-1,total];
-  return [1,'…',cur-1,cur,cur+1,'…',total];
-}
+      function getRange(cur, total) {
+        if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+        if (cur <= 4) return [1, 2, 3, 4, 5, "…", total];
+        if (cur >= total - 3)
+          return [1, "…", total - 4, total - 3, total - 2, total - 1, total];
+        return [1, "…", cur - 1, cur, cur + 1, "…", total];
+      }
 
-function goPage(p) {
-  if (p<1||p>totalPages||p===currentPage) return;
-  currentPage = p;
-  fetchData();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+      function goPage(p) {
+        if (p < 1 || p > totalPages || p === currentPage) return;
+        currentPage = p;
+        fetchData();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
 
-// ── UTILS ───────────────────────────────────────────
-function esc(v) {
-  return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-function highlight(text, q) {
-  if (!q) return text;
-  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
-  return text.replace(re, '<mark>$1</mark>');
-}
-</script>
-</body>
+      // ── UTILS ───────────────────────────────────────────
+      function esc(v) {
+        return String(v)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+      function highlight(text, q) {
+        if (!q) return text;
+        const re = new RegExp(
+          `(${q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+          "gi",
+        );
+        return text.replace(re, "<mark>$1</mark>");
+      }
+    </script>
+  </body>
 </html>
